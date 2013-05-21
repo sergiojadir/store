@@ -2,7 +2,7 @@ require "bundler/capistrano"
 
 server "173.230.132.46", :web, :app, :db, primary: true
 
-set :application, "programerails"
+set :application, "store"
 set :user, "deploy"
 set :deploy_to, "/home/#{user}/apps/#{application}"
 set :deploy_via, :remote_cache
@@ -10,7 +10,7 @@ set :use_sudo, false
 
 set :scm, "git"
 set :repository, "git@github.com:sergiojadir/programerails.git"
-set :branch, "deploy"
+set :branch, "develop"
 
 default_run_options[:pty] = true
 ssh_options[:forward_agent] = true
@@ -29,7 +29,7 @@ namespace :deploy do
     sudo "ln -nfs #{current_path}/config/nginx.conf /etc/nginx/sites-enabled/#{application}"
     sudo "ln -nfs #{current_path}/config/unicorn_init.sh /etc/init.d/unicorn_#{application}"
     run "mkdir -p #{shared_path}/config"
-    put File.read("config/database.example.yml"), "#{shared_path}/config/database.yml"
+    put File.read("config/database.yml"), "#{shared_path}/config/database.yml"
     puts "Now edit the config files in #{shared_path}."
   end
   after "deploy:setup", "deploy:setup_config"
