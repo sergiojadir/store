@@ -1,4 +1,7 @@
-require "bundler/capistrano"
+require "rvm/capistrano"
+require 'bundler/capistrano'
+#require 'capistrano/ext/multistage'
+require 'cape'
 
 server "173.230.132.46", :web, :app, :db, primary: true
 
@@ -12,9 +15,13 @@ set :scm, "git"
 set :repository, "git@github.com:sergiojadir/store.git"
 set :branch, "develop"
 
+# Bundle
+set :bundle_flags, "--deployment --quiet --binstubs --shebang ruby-local-exec"
+
 default_run_options[:pty] = true
 ssh_options[:forward_agent] = true
 
+after "deploy", "deploy:migrate"
 after "deploy", "deploy:cleanup" # keep only the last 5 releases
 
 namespace :deploy do
