@@ -3,13 +3,13 @@ require "bundler/capistrano"
 server "173.230.132.46", :web, :app, :db, primary: true
 
 set :application, "store"
-set :user, "deploy"
+set :user, "root"
 set :deploy_to, "/home/#{user}/apps/#{application}"
 set :deploy_via, :remote_cache
 set :use_sudo, false
 
 set :scm, "git"
-set :repository, "git@github.com:sergiojadir/programerails.git"
+set :repository, "git@github.com:sergiojadir/store.git"
 set :branch, "develop"
 
 default_run_options[:pty] = true
@@ -41,8 +41,8 @@ namespace :deploy do
 
   desc "Make sure local git is in sync with remote."
   task :check_revision, roles: :web do
-    unless `git rev-parse HEAD` == `git rev-parse origin/master`
-      puts "WARNING: HEAD is not the same as origin/master"
+    unless `git rev-parse HEAD` == `git rev-parse origin/develop`
+      puts "WARNING: HEAD is not the same as origin/develop"
       puts "Run `git push` to sync changes."
       exit
     end
