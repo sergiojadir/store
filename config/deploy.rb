@@ -16,7 +16,7 @@ set :repository, "git@github.com:sergiojadir/store.git"
 set :branch, "develop"
 
 # Bundle
-set :bundle_flags, "--deployment --quiet --binstubs --shebang ruby-local-exec"
+set :bundle_flags, "--deployment"
 
 default_run_options[:pty] = true
 ssh_options[:forward_agent] = true
@@ -54,14 +54,5 @@ namespace :deploy do
       exit
     end
   end
-  namespace :bundle do
-
-  desc "run bundle install and ensure all gem requirements are met"
-  task :install do
-    run "cd #{current_path} && bundle install  --without=test --no-update-sources"
-  end
-
-end
-  before "deploy:restart", "bundle:install"
   before "deploy", "deploy:check_revision"
 end
